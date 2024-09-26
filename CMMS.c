@@ -687,3 +687,109 @@ int main(int argc, char const *argv[])
     mems_finish();
     return 0;
 }
+
+
+// //1. mems_finish
+// Purpose: Clean up and free all allocated memory structures when the memory management system is no longer needed.
+
+// Steps:
+// Iterate Through Main Nodes:
+
+// Start from the head of the main node linked list.
+// For each main node, iterate through its associated subnodes.
+// Free Subnodes:
+
+// For each subnode, free the allocated memory for the subnode itself.
+// If the subnode has a dynamic memory area (e.g., the allocated space), free that memory as well.
+// Free Main Nodes:
+
+// After all subnodes are freed, free the main node itself.
+// Set Head to NULL:
+
+// Set the head pointer of the main node linked list to NULL to indicate that the memory management system is finished.
+// Optionally Print a Message:
+
+// Print a message indicating that the memory management has been successfully cleaned up.
+
+
+
+
+// 2. mems_malloc
+// Purpose: Allocate a specified amount of memory and return a pointer to it.
+
+// Steps:
+// Calculate Required Size:
+
+// Determine the total size needed, which might include the requested size and any overhead for managing the memory block.
+// Search for Free Space:
+
+// Iterate through the linked list of main nodes and their subnodes to find a suitable hole (free block) that can accommodate the requested size.
+// Allocate Memory:
+
+// If a suitable hole is found:
+// Update the subnode to mark it as allocated (change its type).
+// If necessary, split the hole into a new smaller hole and the allocated block.
+// Return Pointer:
+
+// Return a pointer to the start of the allocated block (adjusted for any overhead if necessary).
+// If no suitable hole is found, you may need to request additional pages from the operating system (e.g., using mmap or malloc).
+
+
+
+
+// 3. mems_free
+// Purpose: Deallocate previously allocated memory and mark it as free.
+
+// Steps:
+// Locate the Block:
+
+// Start from the head of the main node linked list.
+// For each main node, iterate through its subnodes to find the one corresponding to the pointer ptr passed to mems_free.
+// Mark as Free:
+
+// If the block is found, set its type to 0 (indicating it is now a hole).
+// Merge Adjacent Holes:
+
+// Check if the current block has adjacent holes (previous or next subnode) and merge them into a single larger hole if they are both marked as free.
+// Update Links:
+
+// Adjust the linked list pointers to maintain the integrity of the list after merging.
+
+
+
+
+// 4. mems_print_stats
+// Purpose: Print statistics about memory usage and the current state of allocated and free blocks.
+
+// Steps:
+// Initialize Counters:
+
+// Set counters for the number of main nodes, subnodes, total pages used, and total space unused.
+// Iterate Through Main Nodes:
+
+// For each main node, iterate through its subnodes.
+// Print the virtual addresses and types (P for process and H for hole) of each subnode.
+// Calculate Statistics:
+
+// For each hole, add to the total unused space.
+// Count the number of pages used based on the size of each main node.
+// Print Final Statistics:
+
+// Print the total pages used, total space unused, main chain length, and an array denoting the length of the subchains.
+
+
+
+// 5. mems_get
+// Purpose: Retrieve information about a specific memory block.
+
+// Steps:
+// Locate the Block:
+
+// Start from the head of the main node linked list.
+// For each main node, iterate through its subnodes to find the block corresponding to the pointer ptr.
+// Return Block Information:
+
+// If found, return relevant information about the block, such as its start and end addresses, size, and whether it is allocated or free.
+// Handle Not Found Case:
+
+// If the block is not found, return an error or NULL to indicate that the pointer is invalid.
